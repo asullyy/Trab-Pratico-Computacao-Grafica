@@ -35,12 +35,12 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
 
 def bresenham():
-  x1 = int(input("Digite o ponto x1: "))
-  y1 = int(input("Digite o ponto y1: "))
-  x2 = int(input("Digite o ponto x2: "))
-  y2 = int(input("Digite o ponto y2: "))
+  x1 = float(input("Digite o ponto x1: "))
+  y1 = float(input("Digite o ponto y1: "))
+  x2 = float(input("Digite o ponto x2: "))
+  y2 = float(input("Digite o ponto y2: "))
 
-  #vetor que guarda os pontos iniciais que iram ser aplicados no alg de Bresenham
+  #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
   ptIniciais = [x1, y1, x2, y2]
 
   print("\nPontos iniciais = ({},{}),({},{})\n".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
@@ -56,7 +56,10 @@ def bresenham():
   boolsTroca = [False, False, False]
 
   def reflexao(x1,y1,x2,y2):
-    m = deltaY/deltaX
+    if deltaX != 0:
+      m = deltaY/deltaX
+    else:
+      m = deltaY
 
     if m>1 or m<-1:
       print("fazendo troca de x->y\n")
@@ -101,10 +104,11 @@ def bresenham():
     aux = y1
     aux2 = x1
 
+    #vetores que guardam os valores de y e x que foram calculados pelo alg de breseham 
     ptsY = [y1]
     ptsX = [x1]
 
-    for i in range(x1, x2):
+    for i in range(int(x1), int(x2)):
       if e>0:
         aux+=1
         ptsY.append(aux)
@@ -115,13 +119,24 @@ def bresenham():
 
       aux2+=1
       ptsX.append(aux2)
-
+    #boolsTroca[0] = trocaxy
+    #boolsTroca[1] = trocax
+    #boolsTroca[2] = trocay
+    if boolsTroca[0] == True:
+        aux = ptsX
+        ptsX = ptsY
+        ptsY = aux
+    if boolsTroca[1] == True:
+      for i in range(0, len(ptsY)):
+        ptsX[i] = ptsX[i]*-1
+    if boolsTroca[2] == True:
+      for i in range(0, len(ptsY)):
+        ptsY[i] = ptsY[i]*-1
     return [ptsX, ptsY]
 
   paresOrdenados = algoritmoB(ptIniciais)
 
   return paresOrdenados
-
 #a função bresenham retorna duas listas, uma com os pontos X e outra com os pontos Y: pixels = [ptsX, ptsY]
 pixels = bresenham()
 pontosX = pixels[0]
@@ -138,3 +153,4 @@ mainloop()
 PONTOS TESTE - AULA GUSTAVO RESQUE:
 P1 = (0,3)
 P2 = (3,9)
+'''
