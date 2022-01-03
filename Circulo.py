@@ -148,7 +148,7 @@ CriarTemplate()
 mainloop()
 
 '''
-#-------------------------------------#
 PONTOS TESTE - AULA GUSTAVO RESQUE:
 RAIO = 5
 PONTOS = (6,3)
+'''
