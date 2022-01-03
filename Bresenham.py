@@ -48,7 +48,7 @@ def bresenham():
   #valores de delta para aplicarmos na condicação de teste da 1° octante
   deltaX = x2-x1
   deltaY = y2-y1
-
+  
   #este vetor guardará os booleanos das trocas realizadas ou não na função de reflexão, para posteriormente fazer a reflexão para octante original.
   #boolsTroca[0] = trocaxy
   #boolsTroca[1] = trocax
@@ -116,7 +116,7 @@ def bresenham():
       else:
         ptsY.append(aux)
       e=e+m
-
+      
       aux2+=1
       ptsX.append(aux2)
     #boolsTroca[0] = trocaxy
@@ -133,10 +133,11 @@ def bresenham():
       for i in range(0, len(ptsY)):
         ptsY[i] = ptsY[i]*-1
     return [ptsX, ptsY]
-
+  
   paresOrdenados = algoritmoB(ptIniciais)
-
+  
   return paresOrdenados
+
 #a função bresenham retorna duas listas, uma com os pontos X e outra com os pontos Y: pixels = [ptsX, ptsY]
 pixels = bresenham()
 pontosX = pixels[0]
