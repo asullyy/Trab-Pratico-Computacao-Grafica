@@ -34,104 +34,70 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
 
-def bresenham(x1,y1,x2,y2):
-  #tratando casos de entrada: para os casos como (1,4),(1,1), observou-se que a ordem dos vertices deve estar de forma crescente para o bom funcionamento do algoritmo. Bem como para os casos como: (4,4), (4,1). Por isso faremos o tratamento de entradas abaixo colocando os vértices em ordem crescente nesses casos.
+def Bresenham (xInicial, yInicial, xFinal, yFinal):
 
-  if x1 == x2:
-    if y1>y2:
-      ptIniciais = [x2, y2, x1, y1]
-    if y2>y1:
-      ptIniciais = [x1, y1, x2, y2]
+  pontos = [xInicial, yInicial, xFinal, yFinal]
 
-  if y1 == y2:
-    if x1>x2:
-      ptIniciais = [x2, y2, x1, y1]
-    if x2>x1:
-      ptIniciais = [x1, y1, x2, y2]
-
-  if x1 != x2 and y1 != y2:
-    ptIniciais = [x1, y1, x2, y2]
-
-  #valores de delta para aplicarmos na condicação de teste da 1° octante
-  deltaX = ptIniciais[2] - ptIniciais [0]
-  deltaY = ptIniciais[3] - ptIniciais[1]
+  #bool_reflexao [0] = trocaX
+  #bool_reflexao [1] = trocaY
+  #bool_reflexao [2] = trocaXY
+  bool_reflexao = [False, False, False]
   
-  #este vetor guardará os booleanos das trocas realizadas ou não na função de reflexão, para posteriormente fazer a reflexão para octante original.
-  #boolsTroca[0] = trocaxy
-  #boolsTroca[1] = trocax
-  #boolsTroca[2] = trocay
-  boolsTroca = [False, False, False]
+  def reflexao(m):
+    if xInicial>xFinal:
+      bool_reflexao[0] = True
+      if xInicial != 0:
+        pontos[0] = xInicial*(-1)
+      if xFinal != 0:
+        pontos[2] = xFinal*(-1)
 
-  def reflexao():
-    
-    if deltaX != 0 and deltaY != 0:
-      m = deltaY/deltaX
-    else:
-      if deltaX == 0:
-        m = deltaY
-      if deltaY == 0:
-        m = 0
-   
+    if yInicial>yFinal:
+      bool_reflexao[1] = True
+      if yInicial != 0:
+        pontos[1] = yInicial*(-1)
+      if yFinal != 0:
+        pontos[3] = yFinal*(-1)
+
     if m>1 or m<-1:
-      print("fazendo troca de x->y\n")
-      aux = 0
-      #trocando os valores do par (x1,y1)
-      aux = ptIniciais[0]
-      ptIniciais[0] = ptIniciais[1]
-      ptIniciais[1] = aux
+      bool_reflexao[2] = True
+      aux = pontos[0]
+      pontos[0] = pontos[1]
+      pontos[1] = aux
 
-      #trocando os valores do par (x2,y2)
-      aux = ptIniciais[2]
-      ptIniciais[2] = ptIniciais[3]
-      ptIniciais[3] = aux
-      boolsTroca[0] = True
-    if x1>x2:
-      print("fazendo reflexão em x1 e x2\n")
-      ptIniciais[0] = ptIniciais[0]*(-1)
-      ptIniciais[2] = ptIniciais[2]*(-1)
-      boolsTroca[1]= True
-    if y1>y2:
-      print("fazendo reflexão em y1 e y2\n")
-      ptIniciais[1] = ptIniciais[1]*(-1)
-      ptIniciais[3] = ptIniciais[3]*(-1)
-      boolsTroca[2] = True
+      aux = pontos[2]
+      pontos[2] = pontos[3]
+      pontos[3] = aux
 
-  #verificando se os pontos estão na primeira condição, caso uma das condições seja satisfeita os pontos NÃO estão na primeira octante.
-  if deltaX < deltaY or deltaX<0 or deltaY<0:
-    reflexao()
-    print("Pontos Refletidos = ({},{}),({},{})".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
+  def calculaBresenham(pontos):
+    xInicial = pontos[0]
+    yInicial = pontos[1]
+    xFinal = pontos[2]
+    yFinal = pontos[3]
 
+    deltaX = xFinal - xInicial 
+    deltaY = yFinal - yInicial
 
-  def algoritmoB(ptIniciais):
-    
-    x1 = ptIniciais[0]
-    y1 = ptIniciais[1]
-    x2 = ptIniciais[2]
-    y2 = ptIniciais[3]
-
-    deltaX = x2-x1
-    deltaY = y2-y1
-
-    if deltaX != 0 and deltaY != 0:
+    if deltaX == 0:
+      m = deltaY
+      #não existe divisão por zero, assim m será igual a deltaY
+    if deltaY == 0:
+      m = 0;
+      #todo número dividido por zero é igual a 0
+    if deltaY and deltaX != 0:
       m = deltaY/deltaX
-    else:
-      if deltaX == 0:
-        m = deltaY
-      if deltaY == 0:
-        m = 0
 
     e = m - 0.5
 
-    #esta variável guarda uma cópia do valor de y1, para incrementá-lo.
-    aux = y1
-    aux2 = x1
+    #estas variáveis guardam uma cópia do valor de yInicial e xInicial para incrementá-los.
+    aux = yInicial
+    aux2 = xInicial
 
     #vetores que guardam os valores de y e x que foram calculados pelo alg de breseham 
-    ptsY = [y1]
-    ptsX = [x1]
-    
-    maxX = max(int(x1), int(x2))
-    minX = min(int(x1), int(x2))
+    ptsY = [yInicial]
+    ptsX = [xInicial]
+
+    maxX = max(int(xInicial), int(xFinal))
+    minX = min(int(xInicial), int(xFinal))
 
     for i in range(minX, maxX):
       if e>0:
@@ -144,32 +110,54 @@ def bresenham(x1,y1,x2,y2):
       e=e+m
       aux2+=1
       ptsX.append(aux2)
-  
-    #boolsTroca[0] = trocaxy
-    #boolsTroca[1] = trocax
-    #boolsTroca[2] = trocay
     
-    if boolsTroca[2] == True:
-      print("\nreflexão inversa y")
-      for i in range(0, len(ptsY)):
-        ptsY[i] = ptsY[i]*-1
+   
+    return(ptsX, ptsY)
 
-    if boolsTroca[1] == True:
-      print("\nreflexão inversa x")
-      for i in range(0, len(ptsY)):
-        ptsX[i] = ptsX[i]*-1
+  def reflexaoInversa(pontos):
+    ptsX = pontos[0]
+    ptsY = pontos[1]
 
-    if boolsTroca[0] == True:
-        print("\nreflexão inversa x->y")
-        aux = ptsX
-        ptsX = ptsY
-        ptsY = aux
-        
-    return [ptsX, ptsY]
+    if bool_reflexao[2] == True:
+      aux = ptsX
+      ptsX = ptsY
+      ptsY = aux
+
+    if bool_reflexao[1] == True:
+      for i in range(0, len(ptsY)):
+        ptsY[i] = ptsY[i]*(-1)
   
-  paresOrdenados = algoritmoB(ptIniciais)
+    if bool_reflexao[0] == True:
+      for i in range(0, len(ptsX)):
+        ptsX[i] = ptsX[i]*(-1)
+    
+    return(ptsX, ptsY)
+    
+
+  #1° PASSO: calcular deltaX, delta Y e m;
+  deltaX = xFinal - xInicial 
+  deltaY = yFinal - yInicial
   
-  return paresOrdenados
+  if deltaX == 0:
+    m = deltaY
+    #não existe divisão por zero, assim m será igual a deltaY
+  if deltaY == 0:
+    m = 0;
+    #todo número dividido por zero é igual a 0
+  if deltaY != 0 and deltaX != 0:
+    m = deltaY/deltaX
+  
+  #verificar se os pontos estão na 1° octante. Caso não estejam, aplica-se a reflexão.
+  if deltaX<deltaY or deltaX<0 or deltaY<0:
+    reflexao(m)
+
+  #2° PASSO: aplicar o algoritmo de Bresenham
+  b_pontos = calculaBresenham(pontos)
+
+  #3° PASSO: aplicar a reflexão reversa caso necessário
+  pontosFinais =  reflexaoInversa(b_pontos)
+
+  return pontosFinais
 
 #-----------Polilinhas---------------------------
 n = int(input("Digite o número de vértices: "))
@@ -179,37 +167,35 @@ ptsX = []
 ptsY = []
 for i in range(1,n+1):
   print("ponto {}".format(i))
-  x = int(input("x: "))
+  x = float(input("x: "))
   ptsX.append(x)
-  y = int(input("y: "))
+  y = float(input("y: "))
   ptsY.append(y)
 
 for i in range(0, n-1):
-  pixels = bresenham(ptsX[i], ptsY[i], ptsX[i+1], ptsY[i+1])
+  pixels = Bresenham(ptsX[i], ptsY[i], ptsX[i+1], ptsY[i+1])
   pontosX = pixels[0]
   pontosY = pixels[1]
   for i in range(len(pontosX)):
     DesenharPixel(pontosX[i],pontosY[i], '#ff66b2')
 
 #combinando o último ponto e o primeiro ponto
-pixels = bresenham(ptsX[0], ptsY[0], ptsX[n-1], ptsY[n-1])
+pixels = Bresenham(ptsX[0], ptsY[0], ptsX[n-1], ptsY[n-1])
 pontosX = pixels[0]
 pontosY = pixels[1]
 for i in range(len(pontosX)):
   DesenharPixel(pontosX[i],pontosY[i], '#ff66b2')
-"""
-DesenharPixel(6, 5, '#f00')
-DesenharPixel(5, 7, '#f00')
-DesenharPixel(5, 3, '#f00')
-"""
+
 CriarTemplate()
 mainloop()
 
-#-------------------------------------#
-'''
-PONTOS TESTE - FORMULADO:
-P1 = (1,4)
-P2 = (1,1)
-P3 = (4,1)
-P4 = (4,4)
-'''
+"""
+#ORIENTAÇÕES
+Digite o número de vértices total e posteriormente as coordenadas de cada vértice conforme solicitado.
+
+#EXEMPLO
+P1 = (3,1)
+P2 = (1,3)
+P3 = (3,5)
+P4 = (5,3)
+"""
