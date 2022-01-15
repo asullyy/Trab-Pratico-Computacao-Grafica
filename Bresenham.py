@@ -176,8 +176,10 @@ CriarTemplate()
 mainloop()
 
 """
-#EXEMPLO
+#ORIENTAÇÕES:
+Digitar os valores dos pontos inciais e finais.
 
+#EXEMPLO:
 P1 = (0,3)
 P2 = (0,9)
 """

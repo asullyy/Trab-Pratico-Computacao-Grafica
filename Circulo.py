@@ -148,7 +148,10 @@ CriarTemplate()
 mainloop()
 
 '''
-PONTOS TESTE - AULA GUSTAVO RESQUE:
+#ORIENTAÇÕES:
+Digitar o valor do raio do círculo, em seguida, digitar o valor do ponto inicial.
+
+#EXEMPLO
 RAIO = 5
 PONTOS = (6,3)
 '''
